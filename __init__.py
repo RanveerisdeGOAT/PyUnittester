@@ -296,8 +296,14 @@ class UnitTester:
 
         if all_results:
             slowest_func, slowest_result = max(all_results, key=lambda t: t[1].duration)
-            print(f"Slowest test: {BOLD}{slowest_func}({', '.join(f"{r}" for r in slowest_result.args)}{', '.join(f"{k}={v}" for k, v in slowest_result.kwargs.items())}){RESET} "
-                  f"took {YELLOW}{timestampt(slowest_result.duration)}{RESET}")
+            print(
+                f"Slowest test: {BOLD}{slowest_func}("
+                f"{', '.join(str(r) for r in slowest_result.args)}"
+                f"{', ' if slowest_result.args and slowest_result.kwargs else ''}"
+                f"{', '.join(f'{k}={v}' for k, v in slowest_result.kwargs.items())}"
+                f"){RESET}"
+            )
+
 
         if all_failures:
             print(f"{RED}Failures:{RESET}")
@@ -312,13 +318,13 @@ class UnitTester:
         print(RED, end='')
         if failure.error is None:
             print(
-                f"\t↳ {func_name}({', '.join(f"{r}" for r in failure.args)}{', '.join(f"{k}={v}" for k, v in failure.kwargs.items())}); expected {failure.expected}, "
+                f"\t↳ {func_name}({', '.join(f'{r}' for r in failure.args)}{', '.join(f'{k}={v}' for k, v in failure.kwargs.items())}); expected {failure.expected}, "
                 f"got {BOLD}{failure.result}{RESET}{RED} {ITALIC}[t+{timing}]{slow_flag}{RESET}\n"
             )
         else:
             err = failure.error
             print(
-                f"\t↳ {func_name}({', '.join(f"{r}" for r in failure.args)}{', '.join(f"{k}={v}" for k, v in failure.kwargs.items())}); expected {failure.expected}, "
+                f"\t↳ {func_name}({', '.join(f'{r}' for r in failure.args)}{', '.join(f'{k}={v}' for k, v in failure.kwargs.items())}); expected {failure.expected}, "
                 f"raised {BOLD}{type(err['exception']).__name__}: '{err['exception']}' {ITALIC}[t+{timing}]{slow_flag}{RESET}\n"
                 f"\t\t{RED}↳ caught in file: {BOLD}'{err['filename']}' at line {err['line_no']}{RESET}\n"
                 f"\t\t\t{RED}↳ {err['code']}\n"
@@ -331,9 +337,9 @@ class UnitTester:
         print(RESET, end='')
 
     def _print_stdout(self, result: TestResult, color: str = GREEN, tabbing: int = 2):
-        print(f"{'\t'*tabbing}{color}↳ stdout {ITALIC}[t={format_time(result.time)}]:{RESET}")
+        print(f"{'    '*tabbing}{color}↳ stdout {ITALIC}[t={format_time(result.time)}]:{RESET}")
         for line in result.stdout:
-            print(f"{color}{'\t'*tabbing}\t↳ {ITALIC}[t+{timestampt(line[0])}]:\t{RESET}{color}{line[1]}")
+            print(f"{color}{'    '*tabbing}\t↳ {ITALIC}[t+{timestampt(line[0])}]:\t{RESET}{color}{line[1]}")
         print(RESET)
 
 def timestampt(t: float) -> str:
@@ -370,8 +376,3 @@ def format_time(dt = datetime.now()):
     ms = dt.microsecond // 1000
     us = dt.microsecond % 1000
     return f"{dt.strftime('%H:%M:%S;')}{ms:03d}ms;{us:03d}µs"
-
-
-
-
-
