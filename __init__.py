@@ -19,6 +19,7 @@ ITALIC = "\033[3m"
 BOLD = "\033[1m"
 
 
+# TODO: Inplement debugger:
 def debug_function(func, *args, **kwargs):
     """Run a function under pdb, inside its scope."""
     def tracer(frame, event, arg):
@@ -165,7 +166,7 @@ class UnitTester:
         self.blocks: List[TestBlock] = []
         self.verbose = verbose
         self.show_traceback = show_traceback
-        self.debug_on_fail = False
+        self.debug_on_fail = False # TODO: Implement debugger
         self.slow_threshold = slow_threshold
         self.enable_spinner = enable_spinner
         self.print_result = print_result
@@ -282,8 +283,9 @@ class UnitTester:
                 else:
                     self._print_failure(func_name, r)
 
-            if failed and getattr(self, "debug_on_fail", False):
-                print(f"{YELLOW}--- Entering debugger for failed test ---{RESET}")
+            # TODO:
+            # if failed and getattr(self, "debug_on_fail", False):
+            #     print(f"{YELLOW}--- Entering debugger for failed test ---{RESET}")
 
         global_duration = time.perf_counter() - global_start
         summary_color = GREEN if total_failed == 0 else RED
@@ -368,6 +370,7 @@ def format_time(dt = datetime.now()):
     ms = dt.microsecond // 1000
     us = dt.microsecond % 1000
     return f"{dt.strftime('%H:%M:%S;')}{ms:03d}ms;{us:03d}µs"
+
 
 
 
