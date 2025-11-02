@@ -72,9 +72,9 @@ class TestResult:
 @dataclass
 class TestCase:
     expected: Any
-    func: Optional[Callable] = None
     args: Tuple[Any, ...] = field(default_factory=tuple)
     kwargs: Dict[str, Any] = field(default_factory=dict)
+    func: Optional[Callable] = None
 
 @dataclass
 class UnitTestReport:
@@ -370,6 +370,7 @@ def format_time(dt = datetime.now()):
     ms = dt.microsecond // 1000
     us = dt.microsecond % 1000
     return f"{dt.strftime('%H:%M:%S;')}{ms:03d}ms;{us:03d}µs"
+
 
 
 
