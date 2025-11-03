@@ -161,10 +161,9 @@ class UnitTester:
     Simple unit testing framework with debugging + timing features.
     """
 
-    def __init__(self, verbose: bool = False, show_traceback: bool = False,
+    def __init__(self, show_traceback: bool = False,
                  slow_threshold: float = 0.5, enable_spinner: bool = True, print_result: bool = True) -> None:
         self.blocks: List[TestBlock] = []
-        self.verbose = verbose
         self.show_traceback = show_traceback
         self.debug_on_fail = False # TODO: Implement debugger
         self.slow_threshold = slow_threshold
